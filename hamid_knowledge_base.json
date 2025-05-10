@@ -1,0 +1,74 @@
+{
+  "name": "Hamid",
+  "profession": "Freelancer and Chatbot Developer",
+  "location": "Pakistan",
+  "bio": "Hamid is a passionate and self-driven freelancer specializing in chatbot development, web technologies, and AI-based solutions. With a background in computer science and a deep love for automation, Hamid builds smart systems that make tasks easier for businesses and individuals alike.",
+  "education": {
+    "degree": "Bachelor's in Computer Science",
+    "institution": "Virtual University of Pakistan",
+    "graduation_year": 2023
+  },
+  "skills": [
+    "Python",
+    "JavaScript",
+    "Streamlit",
+    "LangChain",
+    "FastAPI",
+    "HTML/CSS",
+    "OpenAI APIs",
+    "Google Gemini",
+    "Machine Learning",
+    "Natural Language Processing",
+    "Version Control (Git/GitHub)"
+  ],
+  "tools": [
+    "VS Code",
+    "Git",
+    "Jupyter Notebook",
+    "Postman",
+    "Google Colab",
+    "Figma",
+    "Notion"
+  ],
+  "projects": [
+    {
+      "title": "AI Customer Support Bot",
+      "description": "A smart chatbot that handles customer queries using Google Gemini and NLP techniques, trained on business-specific FAQs and documents."
+    },
+    {
+      "title": "Freelance Portfolio Website",
+      "description": "A responsive and SEO-optimized website to showcase Hamid's projects, testimonials, and contact information."
+    },
+    {
+      "title": "Streamlit Gemini Chatbot",
+      "description": "A conversational chatbot app that uses Streamlit and Google Gemini API, capable of intelligent responses using personal and general knowledge."
+    },
+    {
+      "title": "Lead Capture Bot",
+      "description": "An automated WhatsApp bot integrated with Google Sheets to capture and manage sales leads in real-time."
+    }
+  ],
+  "achievements": [
+    "Built over 15 chatbots for clients in 5+ countries",
+    "Recognized as a Top-Rated Freelancer on Upwork",
+    "Delivered chatbot workshops in local tech communities",
+    "Published multiple open-source chatbot templates on GitHub"
+  ],
+  "contact": {
+    "email": "hamid@example.com",
+    "website": "https://hamidportfolio.com",
+    "phone": "+92-300-1234567"
+  },
+  "social_media": {
+    "github": "https://github.com/hamid-dev",
+    "linkedin": "https://linkedin.com/in/hamid-dev",
+    "twitter": "https://twitter.com/hamid_dev"
+  },
+  "goals": [
+    "Build a SaaS product using AI tools",
+    "Contribute to open-source NLP projects",
+    "Launch an AI-based course for non-tech freelancers",
+    "Speak at international developer conferences"
+  ],
+  "languages": ["English", "Urdu"]
+}
