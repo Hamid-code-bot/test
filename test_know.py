@@ -75,11 +75,12 @@ def get_hamid_response(user_input):
         top_matches = [f"{key}: {value}" for _, key, value in matches[:3]]
         return "Here's what I found:\n" + "\n".join(top_matches)
     
-    return "I'm sorry, I don't have specific information about that in my knowledge base." # Improved default response
+    return None  # Let Gemini handle the rest
 
 # --- Streamlit Setup ---
-st.set_page_config(page_title="Hamid's Chatbot", layout="centered") # More specific title
-st.title("🤖 Hamid's Chatbot") # More specific title
+GOOGLE_API_KEY = "AIzaSyDP5oCI9EUZwuRTp-A-RRvQjr7seFYoKxU" # Replace with your actual API key
+st.set_page_config(page_title="Gemini Chatbot", layout="centered")
+st.title("🤖 Hamid's Chatbot")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -88,7 +89,7 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-user_prompt = st.chat_input("Ask me anything about Hamid...") # Improved prompt
+user_prompt = st.chat_input("Say something...")
 
 if user_prompt:
     st.session_state.messages.append({"role": "user", "content": user_prompt})
@@ -98,9 +99,21 @@ if user_prompt:
     # --- Try custom response first ---
     custom_response = get_hamid_response(user_prompt)
 
-    bot_reply = custom_response # No need for the else condition
+    if custom_response:
+        bot_reply = custom_response
+    else:
+        try:
+            from litellm import completion # Import here to minimize issues if litellm is not the problem.
+            response = completion(
+                model="gemini/gemini-1.5-flash",
+                messages=st.session_state.messages,
+                api_key=GOOGLE_API_KEY
+            )
+            bot_reply = response['choices'][0]['message']['content']
+        except Exception as e:
+            bot_reply = f"❌ Error: {e}"
+            st.error(f"An error occurred: {e}") # Show the error in the Streamlit app.
 
     st.session_state.messages.append({"role": "assistant", "content": bot_reply})
     with st.chat_message("assistant"):
         st.markdown(bot_reply)
-
