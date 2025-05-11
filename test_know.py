@@ -1,15 +1,32 @@
 import streamlit as st
-from litellm import completion
 import json
 import spacy
 from rapidfuzz import fuzz
 
 # --- Load NLP model ---
-nlp = spacy.load("en_core_web_sm")
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    st.error(
+        "Error: Could not load the spaCy model.  Please ensure that the 'en_core_web_sm' model is installed.  "
+        "You can install it by running: `python -m spacy download en_core_web_sm` in your terminal."
+    )
+    st.stop()  # Stop if the model fails to load
 
 # --- Load Hamid's knowledge base ---
-with open("hamid_knowledge_base.json", "r") as f:
-    hamid_data = json.load(f)
+try:
+    with open("hamid_knowledge_base.json", "r") as f:
+        hamid_data = json.load(f)
+except FileNotFoundError:
+    st.error(
+        "Error: Could not find 'hamid_knowledge_base.json'.  Please make sure this file is in the same directory as your script."
+    )
+    st.stop()  # Stop if the knowledge base is missing
+except json.JSONDecodeError:
+    st.error(
+        "Error: Invalid JSON in 'hamid_knowledge_base.json'.  Please ensure the file contains valid JSON."
+    )
+    st.stop()
 
 def flatten_json(data, parent_key=''):
     items = []
@@ -58,12 +75,11 @@ def get_hamid_response(user_input):
         top_matches = [f"{key}: {value}" for _, key, value in matches[:3]]
         return "Here's what I found:\n" + "\n".join(top_matches)
     
-    return None  # Let Gemini handle the rest
+    return "I'm sorry, I don't have specific information about that in my knowledge base." # Improved default response
 
 # --- Streamlit Setup ---
-GOOGLE_API_KEY = "AIzaSyAIN0ZmIiSkRkb0h2y0PIp3YBM0p_N9lV8"
-st.set_page_config(page_title="Gemini Chatbot", layout="centered")
-st.title("🤖 Hamid's Chatbot")
+st.set_page_config(page_title="Hamid's Chatbot", layout="centered") # More specific title
+st.title("🤖 Hamid's Chatbot") # More specific title
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -72,7 +88,7 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-user_prompt = st.chat_input("Say something...")
+user_prompt = st.chat_input("Ask me anything about Hamid...") # Improved prompt
 
 if user_prompt:
     st.session_state.messages.append({"role": "user", "content": user_prompt})
@@ -82,19 +98,9 @@ if user_prompt:
     # --- Try custom response first ---
     custom_response = get_hamid_response(user_prompt)
 
-    if custom_response:
-        bot_reply = custom_response
-    else:
-        try:
-            response = completion(
-                model="gemini/gemini-1.5-flash",
-                messages=st.session_state.messages,
-                api_key=GOOGLE_API_KEY
-            )
-            bot_reply = response['choices'][0]['message']['content']
-        except Exception as e:
-            bot_reply = f"❌ Error: {e}"
+    bot_reply = custom_response # No need for the else condition
 
     st.session_state.messages.append({"role": "assistant", "content": bot_reply})
     with st.chat_message("assistant"):
         st.markdown(bot_reply)
+
